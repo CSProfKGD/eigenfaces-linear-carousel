@@ -29,8 +29,10 @@ The eventual site is for non-commercial educational use. Follow the FFHQ attribu
 - Support pointer drag, touch swipe, click-to-center, and Left/Right arrow navigation without a visible carousel control row. Preserve velocity-sensitive momentum on faster swipes while settling exactly on a centered slide.
 - Slider movement updates the reconstruction on the same interaction frame. Do not animate, debounce, or ease direct manipulation.
 - Treat the revealed weight-control surface as a strict carousel no-drag zone so horizontal slider gestures never move the surrounding carousel.
+- When a weight slider has keyboard focus, Left/Right must adjust the native slider and must not navigate the carousel.
 - Show `Weight` at the left of the control and its signed numeric value at the right in a compact tabular-numeral readout, without a sigma or unit suffix.
 - Provide one clearly discoverable reset action that restores all 24 exposed weights to their original projected values.
+- Fade the reset action smoothly from its disabled treatment to cyan when a weight changes.
 - Reset must restore the exact baseline reconstruction. It must not re-run PCA or modify hidden weights.
 - The dimensions value reveals a minimal 1–1000 range control on hover, focus, or tap. It updates the reconstruction and actual cumulative explained variance immediately and defaults to 512.
 - Fade component imagery smoothly between included and out-of-prefix opacity states when dimensions cross its index; reduced-motion mode may switch immediately.
@@ -55,6 +57,7 @@ The eventual site is for non-commercial educational use. Follow the FFHQ attribu
 - Favor square image stages, hairline borders at low opacity, precise alignment, and minimal corner rounding.
 - Keep component imagery grayscale. Eigenface thumbnails must use a shared, symmetric mid-gray normalization so their signs remain visually comparable.
 - Keep every component label readable by sampling the thumbnail behind its left and right caption regions and choosing the higher-contrast light or dark text treatment. The mean card is labelled `Mean` without a redundant mathematical symbol.
+- Do not draw a full-tile hover outline around an eigenface; reserve the selected hairline and keyboard focus indicator for meaningful state.
 - Avoid generic dashboard cards, gradients used only as decoration, oversized pills, ornamental illustrations, and unnecessary explanatory copy.
 - Scale slides only with compositor transforms so neighboring slides never jump or reflow.
 

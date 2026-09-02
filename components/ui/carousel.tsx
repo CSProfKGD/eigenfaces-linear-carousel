@@ -77,6 +77,13 @@ function Carousel({
 
   const handleKeyDown = React.useCallback(
     (event: React.KeyboardEvent<HTMLDivElement>) => {
+      const target = event.target;
+      if (
+        target instanceof Element &&
+        target.closest('[data-carousel-no-drag]')
+      )
+        return;
+
       if (event.key === 'ArrowLeft') {
         event.preventDefault();
         scrollPrev();

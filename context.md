@@ -36,9 +36,11 @@ The page is an interaction-led educational working surface. It should let a visi
 - Reveal a translucent control surface over the lower half of an active tile. Preserve enough of the eigenface above and around it to connect the control to the image.
 - Use a native range input. Pointer and touch changes update the reconstruction immediately.
 - Once the weight surface is revealed, pointer and touch gestures that begin anywhere inside it belong to the slider and must not initiate an Embla drag.
+- Arrow keys pressed while a weight slider has focus belong to the slider and must not navigate Embla.
 - Display weights as signed standardized values for human readability: `z_i = w_i / sqrt(lambda_i)`. The control labels the value `Weight` and deliberately omits a sigma or unit suffix; the stored calculation continues to use raw PCA weights.
 - Each slider spans `z_i,baseline - 3` through `z_i,baseline + 3`, which is equivalent to raw weight bounds `w_i,baseline ± 3 sqrt(lambda_i)`.
 - The reset control restores all 24 exposed raw weights to their baseline values in one state update.
+- Transition the reset action's opacity and color when it becomes enabled; do not introduce a surrounding button box.
 - A PC above the current dimensions value remains browseable, slightly dimmed, and outlined with a restrained red hairline, while its weight control is disabled. Do not show an `Outside current prefix` label; retain that status in the disabled slider's accessible name. Preserve its adjusted value so it becomes effective again when the prefix grows.
 - When a dimensions change moves a PC into or out of the active prefix, transition its thumbnail opacity smoothly instead of dimming abruptly; reduced-motion mode remains effectively instantaneous.
 - The reconstruction dimensions value reveals a minimal slider on hover, keyboard focus, or tap. It spans 1–1000 in integer steps, defaults to 512, and updates the displayed prefix and actual cumulative explained variance together.
