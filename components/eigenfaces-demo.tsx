@@ -297,6 +297,16 @@ export function EigenfacesDemo() {
         <figure className="reconstruction-figure">
           <figcaption className="figure-topline">
             <span className="eyebrow">Reconstruction</span>
+            <Button
+              type="button"
+              variant="ghost"
+              size="sm"
+              className="reset-button"
+              onClick={reset}
+              disabled={!model || !hasChanges}
+            >
+              <RotateCcw aria-hidden="true" /> Reset weights
+            </Button>
           </figcaption>
 
           <div className="reconstruction-stage">
@@ -387,16 +397,6 @@ export function EigenfacesDemo() {
                 </div>
               </div>
             </div>
-            <Button
-              type="button"
-              variant="ghost"
-              size="sm"
-              className="reset-button"
-              onClick={reset}
-              disabled={!model || !hasChanges}
-            >
-              <RotateCcw aria-hidden="true" /> Reset weights
-            </Button>
           </div>
         </figure>
       </section>

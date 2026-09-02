@@ -13,7 +13,7 @@ The eventual site is for non-commercial educational use. Follow the FFHQ attribu
 - Keep the primary working surface visible in the first desktop viewport.
 - The upper-left hero reads `Eigenfaces` with the subtitle `Face It: It’s Just Linear Algebra`.
 - Center one dominant reconstructed-face stage after the hero's full title-and-subtitle block; it must not overlap the hero vertically.
-- Keep the reconstruction topline to the single `Reconstruction` label. Beneath the image, show `Variance retained`, the interactive `Dimensions` value, and the reset action in that order.
+- Keep `Reconstruction` at the left of the figure topline and place the clearly visible reset action at its right. Beneath the image, show only `Variance retained` and the interactive `Dimensions` value so the expanding dimensions control cannot collide with reset.
 - Place one full-width looping linear carousel beneath the reconstruction. Its reading order is the mean face followed by eigenfaces 1–24 in decreasing explained-variance order.
 - The centered slide is largest, adjacent slides progressively recede, and outer slides fade without creating a perspective gimmick.
 - The average-face slide is informational and never presents a weight control.
@@ -29,7 +29,7 @@ The eventual site is for non-commercial educational use. Follow the FFHQ attribu
 - Support pointer drag, touch swipe, click-to-center, and Left/Right arrow navigation without a visible carousel control row.
 - Slider movement updates the reconstruction on the same interaction frame. Do not animate, debounce, or ease direct manipulation.
 - Show the current signed weight in a compact tabular-numeral readout.
-- Provide one quiet reset action that restores all 24 exposed weights to their original projected values.
+- Provide one clearly discoverable reset action that restores all 24 exposed weights to their original projected values.
 - Reset must restore the exact baseline reconstruction. It must not re-run PCA or modify hidden weights.
 - The dimensions value reveals a minimal 1–1000 range control on hover, focus, or tap. It updates the reconstruction and actual cumulative explained variance immediately and defaults to 512.
 - Disable nonessential scaling transitions under `prefers-reduced-motion`.
