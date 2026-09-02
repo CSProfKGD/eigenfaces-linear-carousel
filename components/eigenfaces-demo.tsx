@@ -235,6 +235,10 @@ export function EigenfacesDemo() {
     const media = window.matchMedia('(prefers-reduced-motion: reduce)');
     const sync = () => {
       setReducedMotion(media.matches);
+      if (!carouselApi) {
+        setAutoplaying(!media.matches);
+        return;
+      }
       if (media.matches) {
         autoplay.stop();
         setAutoplaying(false);
@@ -246,9 +250,10 @@ export function EigenfacesDemo() {
     sync();
     media.addEventListener('change', sync);
     return () => media.removeEventListener('change', sync);
-  }, [autoplay]);
+  }, [autoplay, carouselApi]);
 
   useEffect(() => {
+    if (!carouselApi) return;
     if (
       autoplayShouldRun({
         enabled: autoplaying,
@@ -260,7 +265,7 @@ export function EigenfacesDemo() {
     } else {
       autoplay.stop();
     }
-  }, [activeTile, autoplay, autoplaying, reducedMotion]);
+  }, [activeTile, autoplay, autoplaying, carouselApi, reducedMotion]);
 
   const rawWeights = useMemo(() => {
     if (!model || zValues.length !== model.manifest.components.length)
@@ -320,7 +325,7 @@ export function EigenfacesDemo() {
   }, [model]);
 
   const toggleAutoplay = () => {
-    if (reducedMotion) return;
+    if (reducedMotion || !carouselApi) return;
     if (autoplaying) autoplay.stop();
     else autoplay.play();
     setAutoplaying((playing) => !playing);
