@@ -11,7 +11,7 @@ The page is an interaction-led educational working surface. It should let a visi
   - Title: `Eigenfaces`
   - Subtitle: `Face It: It’s Just Linear Algebra`
 - Center the square reconstructed-face figure beneath the complete hero title and subtitle, with clear vertical separation.
-- Put `Reconstruction` and the visually distinct `Reset weights` action on opposite sides of the figure topline. Beneath the image, show only `Variance retained` and `Dimensions`; do not show a projected-face-count metric, and keep the dimensions disclosure clear of reset.
+- Put `Reconstruction` and the unboxed white-text `Reset weights` action on opposite sides of the figure topline. Beneath the image, show only `Variance retained` and `Dimensions`; do not show a projected-face-count metric, and keep the dimensions disclosure clear of reset.
 - Place a full-width looping linear carousel below the reconstruction. Reading order is `Mean`, `PC 01`, `PC 02`, …, `PC 24`.
 - Start with `Mean` centered. Show approximately seven slides at wide desktop widths.
 - The reconstruction remains visually dominant. The centered slide is largest; adjacent slides progressively recede and fade.

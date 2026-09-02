@@ -13,7 +13,7 @@ The eventual site is for non-commercial educational use. Follow the FFHQ attribu
 - Keep the primary working surface visible in the first desktop viewport.
 - The upper-left hero reads `Eigenfaces` with the subtitle `Face It: It’s Just Linear Algebra`.
 - Center one dominant reconstructed-face stage after the hero's full title-and-subtitle block; it must not overlap the hero vertically.
-- Keep `Reconstruction` at the left of the figure topline and place the clearly visible reset action at its right. Beneath the image, show only `Variance retained` and the interactive `Dimensions` value so the expanding dimensions control cannot collide with reset.
+- Keep `Reconstruction` at the left of the figure topline and place the clearly visible reset action at its right as unboxed white text with a white reset symbol. Beneath the image, show only `Variance retained` and the interactive `Dimensions` value so the expanding dimensions control cannot collide with reset.
 - Place one full-width looping linear carousel beneath the reconstruction. Its reading order is the mean face followed by eigenfaces 1–24 in decreasing explained-variance order.
 - The centered slide is largest, adjacent slides progressively recede, and outer slides fade without creating a perspective gimmick.
 - The average-face slide is informational and never presents a weight control.
