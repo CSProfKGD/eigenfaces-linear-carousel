@@ -15,12 +15,6 @@ export function carouselPresentation(
   };
 }
 
-export function carouselSlideLabel(slideIndex: number): string {
-  return slideIndex === 0
-    ? 'Mean'
-    : `PC ${String(slideIndex).padStart(2, '0')}`;
-}
-
 export function componentIsWithinPrefix(
   componentIndex: number,
   dimensions: number,

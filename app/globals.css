@@ -349,20 +349,6 @@ input {
   letter-spacing: 0.19em;
   text-transform: uppercase;
 }
-.carousel-status {
-  display: flex;
-  gap: 14px;
-  color: var(--quiet-ink);
-  font-size: 10px;
-  font-weight: 620;
-  letter-spacing: 0.13em;
-  text-transform: uppercase;
-  font-variant-numeric: tabular-nums;
-}
-.carousel-status span:first-child {
-  color: rgba(53, 200, 237, 0.78);
-}
-
 .component-carousel {
   margin-inline: calc(clamp(18px, 4.6vw, 74px) * -1);
 }
@@ -595,11 +581,6 @@ input {
   }
   .basis-heading {
     align-items: end;
-  }
-  .carousel-status {
-    display: grid;
-    gap: 2px;
-    text-align: right;
   }
   .component-carousel {
     margin-inline: -17px;

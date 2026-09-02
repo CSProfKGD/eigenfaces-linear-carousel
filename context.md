@@ -30,7 +30,7 @@ The page is an interaction-led educational working surface. It should let a visi
 - Continuously interpolate slide scale, opacity, and brightness from distance to the active snap; use compositor transforms so the strip never reflows.
 - Never auto-advance the carousel. Movement occurs only through direct user input.
 - Disable nonessential scale transitions under `prefers-reduced-motion`.
-- Support pointer drag, touch swipe, click/tap-to-center, and Left/Right arrow navigation without a visible previous/play-pause/next control row.
+- Support pointer drag, touch swipe, click/tap-to-center, and Left/Right arrow navigation without a visible previous/play-pause/next control row. Faster flicks may carry across additional snaps, but motion must settle on an exactly centered slide.
 - Only the centered PC may reveal a weight control. Hover or keyboard focus reveals it on pointer devices; tapping the centered slide reveals it on touch.
 - Use a restrained 6px corner radius on the reconstruction and face tiles.
 - Reveal a translucent control surface over the lower half of an active tile. Preserve enough of the eigenface above and around it to connect the control to the image.

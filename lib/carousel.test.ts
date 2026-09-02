@@ -1,10 +1,6 @@
 import { describe, expect, it } from 'vitest';
 
-import {
-  carouselPresentation,
-  carouselSlideLabel,
-  componentIsWithinPrefix,
-} from './carousel';
+import { carouselPresentation, componentIsWithinPrefix } from './carousel';
 
 describe('carousel presentation', () => {
   it('keeps the active snap dominant and progressively recedes neighboring slides', () => {
@@ -24,12 +20,6 @@ describe('carousel presentation', () => {
       opacity: 0.24,
       brightness: 0.58,
     });
-  });
-
-  it('labels the mean and component snaps consistently', () => {
-    expect(carouselSlideLabel(0)).toBe('Mean');
-    expect(carouselSlideLabel(1)).toBe('PC 01');
-    expect(carouselSlideLabel(24)).toBe('PC 24');
   });
 });
 

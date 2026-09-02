@@ -26,7 +26,7 @@ The eventual site is for non-commercial educational use. Follow the FFHQ attribu
 - The centered eigenface reveals its signed weight control on pointer hover or keyboard focus.
 - Tapping or clicking a non-centered slide centers it. Touch users reveal the centered slide's control with a tap, then drag its native range input.
 - The carousel never auto-advances. It moves only in response to direct user input.
-- Support pointer drag, touch swipe, click-to-center, and Left/Right arrow navigation without a visible carousel control row.
+- Support pointer drag, touch swipe, click-to-center, and Left/Right arrow navigation without a visible carousel control row. Preserve velocity-sensitive momentum on faster swipes while settling exactly on a centered slide.
 - Slider movement updates the reconstruction on the same interaction frame. Do not animate, debounce, or ease direct manipulation.
 - Show the current signed weight in a compact tabular-numeral readout.
 - Provide one clearly discoverable reset action that restores all 24 exposed weights to their original projected values.

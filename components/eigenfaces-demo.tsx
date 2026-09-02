@@ -12,11 +12,7 @@ import {
   type CarouselApi,
 } from '@/components/ui/carousel';
 import { Slider } from '@/components/ui/slider';
-import {
-  carouselPresentation,
-  carouselSlideLabel,
-  componentIsWithinPrefix,
-} from '@/lib/carousel';
+import { carouselPresentation, componentIsWithinPrefix } from '@/lib/carousel';
 import { reconstructFace } from '@/lib/eigenfaces';
 
 type ComponentRecord = {
@@ -269,9 +265,6 @@ export function EigenfacesDemo() {
       );
   }, [model]);
 
-  const componentCount = model?.manifest.components.length ?? 24;
-  const totalSlides = componentCount + 1;
-  const selectedLabel = carouselSlideLabel(selectedSlide);
   const hasChanges = Boolean(
     model &&
     zValues.some(
@@ -404,13 +397,6 @@ export function EigenfacesDemo() {
       <section className="basis-section" aria-labelledby="basis-title">
         <div className="basis-heading">
           <h2 id="basis-title">Principal components</h2>
-          <div className="carousel-status" aria-live="polite">
-            <span>{selectedLabel}</span>
-            <span>
-              {String(selectedSlide + 1).padStart(2, '0')} /{' '}
-              {String(totalSlides).padStart(2, '0')}
-            </span>
-          </div>
         </div>
 
         <Carousel
@@ -420,7 +406,8 @@ export function EigenfacesDemo() {
             align: 'center',
             loop: true,
             startIndex: 0,
-            duration: 34,
+            duration: 40,
+            skipSnaps: true,
             slidesToScroll: 1,
           }}
           aria-label="Mean face and principal components"
