@@ -51,6 +51,11 @@ type LoadedModel = {
   vectors: Float32Array[];
 };
 
+function publicAssetUrl(path: string) {
+  if (typeof document === 'undefined') return path;
+  return new URL(path.replace(/^\//, ''), document.baseURI).pathname;
+}
+
 function drawLuminance(
   canvas: HTMLCanvasElement,
   values: Float32Array,
@@ -179,16 +184,18 @@ export function EigenfacesDemo() {
     let cancelled = false;
     async function loadModel() {
       try {
-        const manifestResponse = await fetch('/eigenfaces/manifest.json');
+        const manifestResponse = await fetch(
+          publicAssetUrl('/eigenfaces/manifest.json'),
+        );
         if (!manifestResponse.ok)
           throw new Error('The eigenspace is unavailable.');
         const manifest = (await manifestResponse.json()) as Manifest;
         const [baseline, prefixReconstructions, ...vectors] = await Promise.all(
           [
-            fetchFloat32(manifest.baseline),
-            fetchUint8(manifest.prefixReconstructions),
+            fetchFloat32(publicAssetUrl(manifest.baseline)),
+            fetchUint8(publicAssetUrl(manifest.prefixReconstructions)),
             ...manifest.components.map((component) =>
-              fetchFloat32(component.vector),
+              fetchFloat32(publicAssetUrl(component.vector)),
             ),
           ],
         );
@@ -354,7 +361,7 @@ export function EigenfacesDemo() {
             {!model && !error && (
               <Image
                 className="reconstruction-fallback"
-                src="/eigenfaces/reconstruction.png"
+                src={publicAssetUrl('/eigenfaces/reconstruction.png')}
                 alt="Grayscale preview of the reconstructed input portrait"
                 width={128}
                 height={128}
@@ -473,7 +480,7 @@ export function EigenfacesDemo() {
             >
               <figure className="component-tile mean-tile">
                 <Image
-                  src="/eigenfaces/mean.png"
+                  src={publicAssetUrl('/eigenfaces/mean.png')}
                   alt="Average face across the FFHQ training sample"
                   width={128}
                   height={128}
@@ -519,7 +526,7 @@ export function EigenfacesDemo() {
                     }}
                   >
                     <Image
-                      src={component.thumbnail}
+                      src={publicAssetUrl(component.thumbnail)}
                       alt={`Eigenface for principal component ${component.index}`}
                       width={128}
                       height={128}
