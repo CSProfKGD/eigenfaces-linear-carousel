@@ -25,14 +25,14 @@ The eventual site is for non-commercial educational use. Follow the FFHQ attribu
 
 - The centered eigenface reveals its signed weight control on pointer hover or keyboard focus.
 - Tapping or clicking a non-centered slide centers it. Touch users reveal the centered slide's control with a tap, then drag its native range input.
-- The carousel loops, advances every 2.8 seconds, and pauses during hover, focus, dragging, slider use, or touch interaction before resuming.
+- The carousel never auto-advances. It moves only in response to direct user input.
 - Support pointer drag, touch swipe, click-to-center, and Left/Right arrow navigation without a visible carousel control row.
 - Slider movement updates the reconstruction on the same interaction frame. Do not animate, debounce, or ease direct manipulation.
 - Show the current signed weight in a compact tabular-numeral readout.
 - Provide one quiet reset action that restores all 24 exposed weights to their original projected values.
 - Reset must restore the exact baseline reconstruction. It must not re-run PCA or modify hidden weights.
 - The dimensions value reveals a minimal 1–1000 range control on hover, focus, or tap. It updates the reconstruction and actual cumulative explained variance immediately and defaults to 512.
-- Disable autoplay and nonessential scaling transitions under `prefers-reduced-motion`.
+- Disable nonessential scaling transitions under `prefers-reduced-motion`.
 
 ## Architecture boundaries
 

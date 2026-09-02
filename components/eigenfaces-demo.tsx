@@ -1,7 +1,6 @@
 'use client';
 
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
-import createAutoplay from 'embla-carousel-autoplay';
 import { RotateCcw } from 'lucide-react';
 import Image from 'next/image';
 
@@ -14,7 +13,6 @@ import {
 } from '@/components/ui/carousel';
 import { Slider } from '@/components/ui/slider';
 import {
-  autoplayShouldRun,
   carouselPresentation,
   carouselSlideLabel,
   componentIsWithinPrefix,
@@ -129,20 +127,9 @@ export function EigenfacesDemo() {
   const [activeTile, setActiveTile] = useState<number | null>(null);
   const [carouselApi, setCarouselApi] = useState<CarouselApi>();
   const [selectedSlide, setSelectedSlide] = useState(0);
-  const [autoplaying, setAutoplaying] = useState(true);
-  const [reducedMotion, setReducedMotion] = useState(false);
-  const [carouselHovered, setCarouselHovered] = useState(false);
-  const [carouselFocused, setCarouselFocused] = useState(false);
-  const [carouselDragging, setCarouselDragging] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const pendingTouchTileRef = useRef<number | null>(null);
-  const [autoplay] = useState(() =>
-    createAutoplay({
-      delay: 2800,
-      stopOnInteraction: false,
-    }),
-  );
 
   useEffect(() => {
     let cancelled = false;
@@ -224,56 +211,6 @@ export function EigenfacesDemo() {
       carouselApi.off('select', select);
     };
   }, [carouselApi]);
-
-  useEffect(() => {
-    const media = window.matchMedia('(prefers-reduced-motion: reduce)');
-    const sync = () => {
-      setReducedMotion(media.matches);
-      if (!carouselApi) {
-        setAutoplaying(!media.matches);
-        return;
-      }
-      if (media.matches) {
-        autoplay.stop();
-        setAutoplaying(false);
-      } else {
-        autoplay.play();
-        setAutoplaying(true);
-      }
-    };
-    sync();
-    media.addEventListener('change', sync);
-    return () => media.removeEventListener('change', sync);
-  }, [autoplay, carouselApi]);
-
-  useEffect(() => {
-    if (!carouselApi) return;
-    const interactionActive =
-      carouselHovered ||
-      carouselFocused ||
-      carouselDragging ||
-      activeTile !== null;
-    if (
-      autoplayShouldRun({
-        enabled: autoplaying,
-        reducedMotion,
-        interactionActive,
-      })
-    ) {
-      autoplay.play();
-    } else {
-      autoplay.stop();
-    }
-  }, [
-    activeTile,
-    autoplay,
-    autoplaying,
-    carouselApi,
-    carouselDragging,
-    carouselFocused,
-    carouselHovered,
-    reducedMotion,
-  ]);
 
   const rawWeights = useMemo(() => {
     if (!model || zValues.length !== model.manifest.components.length)
@@ -486,22 +423,9 @@ export function EigenfacesDemo() {
             duration: 34,
             slidesToScroll: 1,
           }}
-          plugins={[autoplay]}
           aria-label="Mean face and principal components"
         >
-          <CarouselContent
-            className="carousel-track"
-            onMouseEnter={() => setCarouselHovered(true)}
-            onMouseLeave={() => setCarouselHovered(false)}
-            onFocusCapture={() => setCarouselFocused(true)}
-            onBlurCapture={(event) => {
-              if (!event.currentTarget.contains(event.relatedTarget))
-                setCarouselFocused(false);
-            }}
-            onPointerDownCapture={() => setCarouselDragging(true)}
-            onPointerUpCapture={() => setCarouselDragging(false)}
-            onPointerCancelCapture={() => setCarouselDragging(false)}
-          >
+          <CarouselContent className="carousel-track">
             <CarouselItem
               className={`component-slide${selectedSlide === 0 ? ' is-selected' : ''}`}
             >

@@ -1,7 +1,6 @@
 import { describe, expect, it } from 'vitest';
 
 import {
-  autoplayShouldRun,
   carouselPresentation,
   carouselSlideLabel,
   componentIsWithinPrefix,
@@ -38,38 +37,5 @@ describe('component prefix eligibility', () => {
   it('includes components at or below the current reconstruction dimensions', () => {
     expect(componentIsWithinPrefix(24, 24)).toBe(true);
     expect(componentIsWithinPrefix(24, 23)).toBe(false);
-  });
-});
-
-describe('carousel autoplay policy', () => {
-  it('runs only when enabled, motion is allowed, and no interaction is active', () => {
-    expect(
-      autoplayShouldRun({
-        enabled: true,
-        reducedMotion: false,
-        interactionActive: false,
-      }),
-    ).toBe(true);
-    expect(
-      autoplayShouldRun({
-        enabled: true,
-        reducedMotion: true,
-        interactionActive: false,
-      }),
-    ).toBe(false);
-    expect(
-      autoplayShouldRun({
-        enabled: true,
-        reducedMotion: false,
-        interactionActive: true,
-      }),
-    ).toBe(false);
-    expect(
-      autoplayShouldRun({
-        enabled: false,
-        reducedMotion: false,
-        interactionActive: false,
-      }),
-    ).toBe(false);
   });
 });

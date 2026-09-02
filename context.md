@@ -28,8 +28,8 @@ The page is an interaction-led educational working surface. It should let a visi
 
 - Use the installed shadcn Carousel backed by Embla with center alignment, looping, and one slide per snap.
 - Continuously interpolate slide scale, opacity, and brightness from distance to the active snap; use compositor transforms so the strip never reflows.
-- Autoplay advances every 2.8 seconds. Pause during hover, focus, dragging, slider use, or touch interaction and resume afterward.
-- Disable autoplay and nonessential scale transitions under `prefers-reduced-motion`.
+- Never auto-advance the carousel. Movement occurs only through direct user input.
+- Disable nonessential scale transitions under `prefers-reduced-motion`.
 - Support pointer drag, touch swipe, click/tap-to-center, and Left/Right arrow navigation without a visible previous/play-pause/next control row.
 - Only the centered PC may reveal a weight control. Hover or keyboard focus reveals it on pointer devices; tapping the centered slide reveals it on touch.
 - Use a restrained 6px corner radius on the reconstruction and face tiles.
@@ -152,7 +152,7 @@ The exact serialization may follow the generated site scaffold, but the logical 
 ## State model
 
 - Immutable loaded state: manifest, 1000 cached prefix reconstructions, default baseline, eigenvectors 1–24, eigenvalues, baseline weights, and cumulative explained variance.
-- Mutable UI state: selected dimensions (default 512), 24 adjusted raw weights, the selected carousel snap, autoplay state, and currently revealed control.
+- Mutable UI state: selected dimensions (default 512), 24 adjusted raw weights, the selected carousel snap, and currently revealed control.
 - Derived state: selected prefix, standardized display values, actual retained variance, and current reconstructed luminance buffer.
 - Do not duplicate reconstruction state across the stage and component carousel. Both consume the same canonical values.
 - Do not persist adjusted face weights across sessions unless a later product requirement explicitly requests it.
@@ -176,7 +176,7 @@ The exact serialization may follow the generated site scaffold, but the logical 
 - Make slider controls discoverable by focus without requiring hover.
 - On touch, tapping a different component dismisses the prior overlay and reveals the new one.
 - Provide visible focus rings, sufficient contrast, and targets of at least 44 CSS pixels where touch interaction is expected.
-- Under `prefers-reduced-motion: reduce`, stop autoplay, remove slide scaling, and reduce disclosure transitions to effectively instantaneous state changes.
+- Under `prefers-reduced-motion: reduce`, remove slide scaling and reduce disclosure transitions to effectively instantaneous state changes.
 
 ## Tests and acceptance criteria
 
@@ -207,7 +207,7 @@ The exact serialization may follow the generated site scaffold, but the logical 
 - Mean is first, initially centered, and noninteractive; PC 01–24 follow in correct variance order.
 - Hover, keyboard focus, and touch can each reveal and operate every centered component slider.
 - Slide scaling does not cause layout shift or clipping of focus indicators.
-- The carousel loops and pauses for direct interaction; swipe, drag, click-to-center, and keyboard navigation remain available when autoplay is disabled.
+- The carousel loops only through direct swipe, drag, click-to-center, and keyboard navigation; it never advances on a timer.
 - Reset is keyboard and touch accessible and visibly returns every readout to its baseline.
 - Mobile layouts preserve content order and introduce no horizontal scrolling.
 - Reduced-motion mode removes nonessential scaling and animation.

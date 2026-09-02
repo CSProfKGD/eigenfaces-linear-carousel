@@ -27,15 +27,3 @@ export function componentIsWithinPrefix(
 ): boolean {
   return componentIndex <= dimensions;
 }
-
-export function autoplayShouldRun({
-  enabled,
-  reducedMotion,
-  interactionActive,
-}: {
-  enabled: boolean;
-  reducedMotion: boolean;
-  interactionActive: boolean;
-}): boolean {
-  return enabled && !reducedMotion && !interactionActive;
-}
