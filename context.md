@@ -35,6 +35,7 @@ The page is an interaction-led educational working surface. It should let a visi
 - Use a restrained 6px corner radius on the reconstruction and face tiles.
 - Reveal a translucent control surface over the lower half of an active tile. Preserve enough of the eigenface above and around it to connect the control to the image.
 - Use a native range input. Pointer and touch changes update the reconstruction immediately.
+- Once the weight surface is revealed, pointer and touch gestures that begin anywhere inside it belong to the slider and must not initiate an Embla drag.
 - Display weights in standard-deviation units for human readability: `z_i = w_i / sqrt(lambda_i)`. The stored calculation continues to use raw PCA weights.
 - Each slider spans `z_i,baseline - 3` through `z_i,baseline + 3`, which is equivalent to raw weight bounds `w_i,baseline ± 3 sqrt(lambda_i)`.
 - The reset control restores all 24 exposed raw weights to their baseline values in one state update.

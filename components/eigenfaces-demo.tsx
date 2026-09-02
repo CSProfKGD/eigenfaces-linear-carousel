@@ -457,6 +457,13 @@ export function EigenfacesDemo() {
             duration: 40,
             skipSnaps: true,
             slidesToScroll: 1,
+            watchDrag: (_api, event) => {
+              const target = event.target;
+              return !(
+                target instanceof Element &&
+                target.closest('[data-carousel-no-drag]')
+              );
+            },
           }}
           aria-label="Mean face and principal components"
         >
@@ -548,7 +555,7 @@ export function EigenfacesDemo() {
                       }}
                     />
                     <div className="weight-hover-zone" aria-hidden="true" />
-                    <div className="weight-control">
+                    <div className="weight-control" data-carousel-no-drag>
                       <div className="weight-readout">
                         <span>
                           {excluded ? 'Outside current prefix' : 'Weight'}

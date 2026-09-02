@@ -28,6 +28,7 @@ The eventual site is for non-commercial educational use. Follow the FFHQ attribu
 - The carousel never auto-advances. It moves only in response to direct user input.
 - Support pointer drag, touch swipe, click-to-center, and Left/Right arrow navigation without a visible carousel control row. Preserve velocity-sensitive momentum on faster swipes while settling exactly on a centered slide.
 - Slider movement updates the reconstruction on the same interaction frame. Do not animate, debounce, or ease direct manipulation.
+- Treat the revealed weight-control surface as a strict carousel no-drag zone so horizontal slider gestures never move the surrounding carousel.
 - Show the current signed weight in a compact tabular-numeral readout.
 - Provide one clearly discoverable reset action that restores all 24 exposed weights to their original projected values.
 - Reset must restore the exact baseline reconstruction. It must not re-run PCA or modify hidden weights.
