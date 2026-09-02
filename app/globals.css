@@ -422,26 +422,35 @@ input {
   z-index: 3;
   inset: 0 0 auto;
   padding: 9px 10px;
-  color: rgba(255, 255, 255, 0.78);
   font-size: 9px;
   font-weight: 680;
   letter-spacing: 0.13em;
   text-transform: uppercase;
-  text-shadow: 0 1px 8px rgba(0, 0, 0, 0.72);
+}
+.component-tile figcaption span {
+  color: rgba(255, 255, 255, 0.9);
+  text-shadow:
+    0 1px 8px rgba(0, 0, 0, 0.92),
+    0 0 2px rgba(0, 0, 0, 0.95);
 }
 .component-tile figcaption small {
-  color: rgba(255, 255, 255, 0.54);
+  color: rgba(255, 255, 255, 0.82);
   font-size: 9px;
   font-weight: 520;
   font-variant-numeric: tabular-nums;
+  text-shadow:
+    0 1px 8px rgba(0, 0, 0, 0.92),
+    0 0 2px rgba(0, 0, 0, 0.95);
+}
+.component-tile[data-caption-left='dark'] figcaption span,
+.component-tile[data-caption-right='dark'] figcaption small {
+  color: rgba(2, 4, 5, 0.88);
+  text-shadow:
+    0 1px 8px rgba(255, 255, 255, 0.78),
+    0 0 2px rgba(255, 255, 255, 0.82);
 }
 .mean-tile {
   border-color: rgba(246, 201, 39, 0.3);
-}
-.mean-tile figcaption small {
-  color: rgba(246, 201, 39, 0.88);
-  font-size: 13px;
-  text-transform: none;
 }
 .tile-activator {
   position: absolute;
@@ -457,6 +466,17 @@ input {
   outline: 2px solid var(--cyan);
   outline-offset: -3px;
   border-radius: inherit;
+}
+.weight-hover-zone {
+  position: absolute;
+  z-index: 3;
+  inset: 50% 0 0;
+  pointer-events: none;
+}
+@media (hover: hover) and (pointer: fine) {
+  .component-slide.is-selected .weight-hover-zone {
+    pointer-events: auto;
+  }
 }
 .weight-control {
   position: absolute;
@@ -481,7 +501,8 @@ input {
     opacity 220ms ease,
     visibility 0s linear 220ms;
 }
-.component-slide.is-selected .control-tile:hover .weight-control,
+.component-slide.is-selected .weight-hover-zone:hover + .weight-control,
+.component-slide.is-selected .weight-control:hover,
 .component-slide.is-selected .control-tile:focus-within .weight-control,
 .component-slide.is-selected .control-tile.is-active .weight-control {
   opacity: 1;
@@ -489,7 +510,8 @@ input {
   pointer-events: auto;
   transition-delay: 0s;
 }
-.component-slide.is-selected .control-tile:hover::after,
+.component-slide.is-selected .control-tile:has(.weight-hover-zone:hover)::after,
+.component-slide.is-selected .control-tile:has(.weight-control:hover)::after,
 .component-slide.is-selected .control-tile:focus-within::after,
 .component-slide.is-selected .control-tile.is-active::after {
   opacity: 0.45;

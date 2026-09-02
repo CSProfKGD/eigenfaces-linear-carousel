@@ -31,7 +31,7 @@ The page is an interaction-led educational working surface. It should let a visi
 - Never auto-advance the carousel. Movement occurs only through direct user input.
 - Disable nonessential scale transitions under `prefers-reduced-motion`.
 - Support pointer drag, touch swipe, click/tap-to-center, and Left/Right arrow navigation without a visible previous/play-pause/next control row. Faster flicks may carry across additional snaps, but motion must settle on an exactly centered slide.
-- Only the centered PC may reveal a weight control. Hover or keyboard focus reveals it on pointer devices; tapping the centered slide reveals it on touch.
+- Only the centered PC may reveal a weight control. On pointer devices, hovering the bottom half reveals it while the upper half remains inspection-only; keyboard focus still reveals it from any entry point, and tapping the centered slide reveals it on touch.
 - Use a restrained 6px corner radius on the reconstruction and face tiles.
 - Reveal a translucent control surface over the lower half of an active tile. Preserve enough of the eigenface above and around it to connect the control to the image.
 - Use a native range input. Pointer and touch changes update the reconstruction immediately.
@@ -164,6 +164,7 @@ The exact serialization may follow the generated site scaffold, but the logical 
 - Cyan: focus, live slider tracks, and active component state only.
 - Warm gold: a single restrained emphasis associated with the reconstruction or reset-to-baseline state.
 - Images: crisp square grayscale surfaces with hairline framing and no decorative colorization.
+- Captions: sample luminance beneath the left label and right percentage independently, choose light or dark text for contrast, and retain an opposing shadow for mixed-tone imagery. Label the average-face card only as `Mean`.
 - Motion: short opacity/transform transitions for disclosure and focus; no entrance animation and no easing on direct slider movement.
 - Keep the title large and confident but subordinate the hero's footprint to the working surface.
 

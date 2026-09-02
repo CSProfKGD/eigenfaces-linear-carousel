@@ -23,7 +23,7 @@ The eventual site is for non-commercial educational use. Follow the FFHQ attribu
 
 ## Interaction model
 
-- The centered eigenface reveals its signed weight control on pointer hover or keyboard focus.
+- The centered eigenface reveals its signed weight control when a pointer enters the bottom half or when any of its controls receive keyboard focus. Hovering the upper half leaves the image unobscured.
 - Tapping or clicking a non-centered slide centers it. Touch users reveal the centered slide's control with a tap, then drag its native range input.
 - The carousel never auto-advances. It moves only in response to direct user input.
 - Support pointer drag, touch swipe, click-to-center, and Left/Right arrow navigation without a visible carousel control row. Preserve velocity-sensitive momentum on faster swipes while settling exactly on a centered slide.
@@ -51,6 +51,7 @@ The eventual site is for non-commercial educational use. Follow the FFHQ attribu
 - Use the system Apple font stack; do not add web fonts. Set numeric values with tabular figures.
 - Favor square image stages, hairline borders at low opacity, precise alignment, and minimal corner rounding.
 - Keep component imagery grayscale. Eigenface thumbnails must use a shared, symmetric mid-gray normalization so their signs remain visually comparable.
+- Keep every component label readable by sampling the thumbnail behind its left and right caption regions and choosing the higher-contrast light or dark text treatment. The mean card is labelled `Mean` without a redundant mathematical symbol.
 - Avoid generic dashboard cards, gradients used only as decoration, oversized pills, ornamental illustrations, and unnecessary explanatory copy.
 - Scale slides only with compositor transforms so neighboring slides never jump or reflow.
 

@@ -4,6 +4,12 @@ export type CarouselPresentation = {
   brightness: number;
 };
 
+export type CaptionTone = 'dark' | 'light';
+
+export function captionToneForLuminance(luminance: number): CaptionTone {
+  return luminance > 0.46 ? 'dark' : 'light';
+}
+
 export function carouselPresentation(
   stepsFromCenter: number,
 ): CarouselPresentation {

@@ -12,7 +12,11 @@ import {
   type CarouselApi,
 } from '@/components/ui/carousel';
 import { Slider } from '@/components/ui/slider';
-import { carouselPresentation, componentIsWithinPrefix } from '@/lib/carousel';
+import {
+  captionToneForLuminance,
+  carouselPresentation,
+  componentIsWithinPrefix,
+} from '@/lib/carousel';
 import { reconstructFace } from '@/lib/eigenfaces';
 
 type ComponentRecord = {
@@ -90,6 +94,50 @@ function decodePrefixDeltas(payload: Uint8Array, pixelCount: number) {
     payload[offset] = (payload[offset] + payload[offset - pixelCount]) & 0xff;
   }
   return payload;
+}
+
+function applyCaptionContrast(image: HTMLImageElement) {
+  const tile = image.closest<HTMLElement>('.component-tile');
+  if (!tile || !image.naturalWidth || !image.naturalHeight) return;
+
+  const width = 48;
+  const height = 48;
+  const canvas = document.createElement('canvas');
+  canvas.width = width;
+  canvas.height = height;
+  const context = canvas.getContext('2d', { willReadFrequently: true });
+  if (!context) return;
+
+  try {
+    context.drawImage(image, 0, 0, width, height);
+    const pixels = context.getImageData(0, 0, width, height).data;
+    const sampleHeight = 16;
+    const averageLuminance = (startX: number, endX: number) => {
+      let total = 0;
+      let count = 0;
+      for (let y = 0; y < sampleHeight; y += 1) {
+        for (let x = startX; x < endX; x += 1) {
+          const offset = (y * width + x) * 4;
+          total +=
+            (0.2126 * pixels[offset] +
+              0.7152 * pixels[offset + 1] +
+              0.0722 * pixels[offset + 2]) /
+            255;
+          count += 1;
+        }
+      }
+      return count ? total / count : 0;
+    };
+
+    tile.dataset.captionLeft = captionToneForLuminance(
+      averageLuminance(0, width / 2),
+    );
+    tile.dataset.captionRight = captionToneForLuminance(
+      averageLuminance(width / 2, width),
+    );
+  } catch {
+    // Keep the high-contrast light-text fallback if pixels cannot be sampled.
+  }
 }
 
 function applyCarouselDepth(api: CarouselApi) {
@@ -423,10 +471,10 @@ export function EigenfacesDemo() {
                   width={128}
                   height={128}
                   unoptimized
+                  onLoad={(event) => applyCaptionContrast(event.currentTarget)}
                 />
                 <figcaption>
                   <span>Mean</span>
-                  <small>μ</small>
                 </figcaption>
                 <button
                   type="button"
@@ -469,6 +517,9 @@ export function EigenfacesDemo() {
                       width={128}
                       height={128}
                       unoptimized
+                      onLoad={(event) =>
+                        applyCaptionContrast(event.currentTarget)
+                      }
                     />
                     <figcaption>
                       <span>PC {String(component.index).padStart(2, '0')}</span>
@@ -496,6 +547,7 @@ export function EigenfacesDemo() {
                         }
                       }}
                     />
+                    <div className="weight-hover-zone" aria-hidden="true" />
                     <div className="weight-control">
                       <div className="weight-readout">
                         <span>

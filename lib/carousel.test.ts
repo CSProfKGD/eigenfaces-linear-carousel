@@ -1,6 +1,10 @@
 import { describe, expect, it } from 'vitest';
 
-import { carouselPresentation, componentIsWithinPrefix } from './carousel';
+import {
+  captionToneForLuminance,
+  carouselPresentation,
+  componentIsWithinPrefix,
+} from './carousel';
 
 describe('carousel presentation', () => {
   it('keeps the active snap dominant and progressively recedes neighboring slides', () => {
@@ -20,6 +24,14 @@ describe('carousel presentation', () => {
       opacity: 0.24,
       brightness: 0.58,
     });
+  });
+});
+
+describe('caption contrast', () => {
+  it('selects dark text on light imagery and light text on dark imagery', () => {
+    expect(captionToneForLuminance(0.9)).toBe('dark');
+    expect(captionToneForLuminance(0.1)).toBe('light');
+    expect(captionToneForLuminance(0.46)).toBe('light');
   });
 });
 
