@@ -530,6 +530,21 @@ input {
   height: 13px;
   border-color: rgba(255, 255, 255, 0.9);
   background: #071015;
+  box-shadow: none;
+  transition:
+    border-color 120ms ease,
+    background-color 120ms ease;
+}
+.weight-control [data-slot='slider-thumb']:hover,
+.weight-control [data-slot='slider-thumb']:active {
+  border-color: var(--cyan);
+  box-shadow: none;
+}
+.weight-control [data-slot='slider-thumb']:focus-visible {
+  border-color: var(--cyan);
+  outline: 1px solid var(--cyan);
+  outline-offset: 3px;
+  box-shadow: none;
 }
 .control-tile.is-excluded img {
   opacity: 0.66;
