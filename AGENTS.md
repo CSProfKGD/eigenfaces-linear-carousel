@@ -29,7 +29,7 @@ The eventual site is for non-commercial educational use. Follow the FFHQ attribu
 - Support pointer drag, touch swipe, click-to-center, and Left/Right arrow navigation without a visible carousel control row. Preserve velocity-sensitive momentum on faster swipes while settling exactly on a centered slide.
 - Slider movement updates the reconstruction on the same interaction frame. Do not animate, debounce, or ease direct manipulation.
 - Treat the revealed weight-control surface as a strict carousel no-drag zone so horizontal slider gestures never move the surrounding carousel.
-- Show the current signed weight in a compact tabular-numeral readout.
+- Show `Weight` at the left of the control and its signed numeric value at the right in a compact tabular-numeral readout, without a sigma or unit suffix.
 - Provide one clearly discoverable reset action that restores all 24 exposed weights to their original projected values.
 - Reset must restore the exact baseline reconstruction. It must not re-run PCA or modify hidden weights.
 - The dimensions value reveals a minimal 1–1000 range control on hover, focus, or tap. It updates the reconstruction and actual cumulative explained variance immediately and defaults to 512.

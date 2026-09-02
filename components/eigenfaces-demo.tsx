@@ -560,7 +560,7 @@ export function EigenfacesDemo() {
                         <span>Weight</span>
                         <output>
                           {value >= 0 ? '+' : ''}
-                          {value.toFixed(2)}σ
+                          {value.toFixed(2)}
                         </output>
                       </div>
                       <Slider
