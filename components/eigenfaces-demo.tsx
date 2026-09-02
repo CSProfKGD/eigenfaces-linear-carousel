@@ -18,6 +18,7 @@ import {
   componentIsWithinPrefix,
 } from '@/lib/carousel';
 import { reconstructFace } from '@/lib/eigenfaces';
+import { interpolateValues } from '@/lib/motion';
 
 type ComponentRecord = {
   index: number;
@@ -168,6 +169,27 @@ function applyCarouselDepth(api: CarouselApi) {
   });
 }
 
+function animateResetValues(
+  startValues: number[],
+  baselineValues: number[],
+  onFrame: (values: number[]) => void,
+  onComplete: () => void,
+) {
+  const startedAt = performance.now();
+  const duration = 520;
+  let frameId = 0;
+  const step = (now: number) => {
+    const progress = Math.min(1, (now - startedAt) / duration);
+    onFrame(interpolateValues(startValues, baselineValues, progress));
+
+    if (progress < 1) frameId = requestAnimationFrame(step);
+    else onComplete();
+  };
+
+  frameId = requestAnimationFrame(step);
+  return () => cancelAnimationFrame(frameId);
+}
+
 export function EigenfacesDemo() {
   const [model, setModel] = useState<LoadedModel | null>(null);
   const [zValues, setZValues] = useState<number[]>([]);
@@ -179,6 +201,20 @@ export function EigenfacesDemo() {
   const [error, setError] = useState<string | null>(null);
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const pendingTouchTileRef = useRef<number | null>(null);
+  const resetAnimationRef = useRef<(() => void) | null>(null);
+  const zValuesRef = useRef<number[]>([]);
+
+  useEffect(() => {
+    zValuesRef.current = zValues;
+  }, [zValues]);
+
+  const cancelResetAnimation = useCallback(() => {
+    if (resetAnimationRef.current === null) return;
+    resetAnimationRef.current();
+    resetAnimationRef.current = null;
+  }, []);
+
+  useEffect(() => cancelResetAnimation, [cancelResetAnimation]);
 
   useEffect(() => {
     let cancelled = false;
@@ -314,11 +350,37 @@ export function EigenfacesDemo() {
   }, [dimensions, model, rawWeights, selectedPrefix]);
 
   const reset = useCallback(() => {
-    if (model)
-      setZValues(
-        model.manifest.components.map((component) => component.baselineZ),
-      );
-  }, [model]);
+    if (!model) return;
+
+    cancelResetAnimation();
+    const startValues = zValuesRef.current.slice();
+    const baselineValues = model.manifest.components.map(
+      (component) => component.baselineZ,
+    );
+    const reduceMotion = window.matchMedia(
+      '(prefers-reduced-motion: reduce)',
+    ).matches;
+
+    if (reduceMotion) {
+      zValuesRef.current = baselineValues;
+      setZValues(baselineValues);
+      return;
+    }
+
+    resetAnimationRef.current = animateResetValues(
+      startValues,
+      baselineValues,
+      (nextValues) => {
+        zValuesRef.current = nextValues;
+        setZValues(nextValues);
+      },
+      () => {
+        resetAnimationRef.current = null;
+        zValuesRef.current = baselineValues;
+        setZValues(baselineValues);
+      },
+    );
+  }, [cancelResetAnimation, model]);
 
   const hasChanges = Boolean(
     model &&
@@ -582,6 +644,7 @@ export function EigenfacesDemo() {
                         value={[value]}
                         disabled={excluded}
                         onValueChange={(next) => {
+                          cancelResetAnimation();
                           const nextValue = Array.isArray(next)
                             ? next[0]
                             : next;

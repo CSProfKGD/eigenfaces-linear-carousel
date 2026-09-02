@@ -39,7 +39,7 @@ The page is an interaction-led educational working surface. It should let a visi
 - Arrow keys pressed while a weight slider has focus belong to the slider and must not navigate Embla.
 - Display weights as signed standardized values for human readability: `z_i = w_i / sqrt(lambda_i)`. The control labels the value `Weight` and deliberately omits a sigma or unit suffix; the stored calculation continues to use raw PCA weights.
 - Each slider spans `z_i,baseline - 3` through `z_i,baseline + 3`, which is equivalent to raw weight bounds `w_i,baseline ± 3 sqrt(lambda_i)`.
-- The reset control restores all 24 exposed raw weights to their baseline values in one state update.
+- The reset control eases all 24 exposed raw weights and the reconstruction back to their exact baseline values over 520 ms with an ease-out curve. Direct slider input interrupts the reset and remains immediate; under reduced motion, reset completes in one state update.
 - Transition the reset action's opacity and color when it becomes enabled; do not introduce a surrounding button box.
 - A PC above the current dimensions value remains browseable, slightly dimmed, and outlined with a restrained red hairline, while its weight control is disabled. Do not show an `Outside current prefix` label; retain that status in the disabled slider's accessible name. Preserve its adjusted value so it becomes effective again when the prefix grows.
 - When a dimensions change moves a PC into or out of the active prefix, transition its thumbnail opacity smoothly instead of dimming abruptly; reduced-motion mode remains effectively instantaneous.
@@ -54,7 +54,7 @@ This project uses FFHQ only for a non-commercial educational visualization of PC
 
 ### Required attribution and restrictions
 
-- Cite Tero Karras, Samuli Laine, and Timo Aila, *A Style-Based Generator Architecture for Generative Adversarial Networks*.
+- Cite Tero Karras, Samuli Laine, and Timo Aila, _A Style-Based Generator Architecture for Generative Adversarial Networks_.
 - Link to the official dataset repository: <https://github.com/NVlabs/ffhq-dataset>.
 - State that the source images were automatically aligned and cropped and that this project converts a deterministic subset to grayscale, resizes it, and derives PCA artifacts.
 - Preserve FFHQ's CC BY-NC-SA 4.0 dataset terms and the original per-image license metadata obligations.

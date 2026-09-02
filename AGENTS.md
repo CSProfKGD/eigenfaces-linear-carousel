@@ -34,6 +34,7 @@ The eventual site is for non-commercial educational use. Follow the FFHQ attribu
 - Provide one clearly discoverable reset action that restores all 24 exposed weights to their original projected values.
 - Fade the reset action smoothly from its disabled treatment to cyan when a weight changes.
 - Reset must restore the exact baseline reconstruction. It must not re-run PCA or modify hidden weights.
+- Reset eases all 24 exposed weights and the reconstruction back to the exact baseline over a short, restrained interval. Direct slider manipulation remains immediate, interrupts an in-progress reset, and reduced-motion mode resets instantly.
 - The dimensions value reveals a minimal 1–1000 range control on hover, focus, or tap. It updates the reconstruction and actual cumulative explained variance immediately and defaults to 512.
 - Fade component imagery smoothly between included and out-of-prefix opacity states when dimensions cross its index; reduced-motion mode may switch immediately.
 - Mark out-of-prefix component cards with a restrained red hairline in addition to dimming, without visible status copy. Preserve the status in the disabled slider's accessible name so color is not the only cue.
