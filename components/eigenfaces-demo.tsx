@@ -557,16 +557,18 @@ export function EigenfacesDemo() {
                     <div className="weight-hover-zone" aria-hidden="true" />
                     <div className="weight-control" data-carousel-no-drag>
                       <div className="weight-readout">
-                        <span>
-                          {excluded ? 'Outside current prefix' : 'Weight'}
-                        </span>
+                        <span>Weight</span>
                         <output>
                           {value >= 0 ? '+' : ''}
                           {value.toFixed(2)}σ
                         </output>
                       </div>
                       <Slider
-                        aria-label={`Adjust principal component ${component.index} weight`}
+                        aria-label={
+                          excluded
+                            ? `Principal component ${component.index} weight, unavailable outside the current dimensions prefix`
+                            : `Adjust principal component ${component.index} weight`
+                        }
                         min={component.baselineZ - 3}
                         max={component.baselineZ + 3}
                         step={0.01}
