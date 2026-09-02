@@ -5,10 +5,9 @@ export type CarouselPresentation = {
 };
 
 export function carouselPresentation(
-  distanceFromSnap: number,
-  slideCount: number,
+  stepsFromCenter: number,
 ): CarouselPresentation {
-  const stepsAway = Math.abs(distanceFromSnap * slideCount);
+  const stepsAway = Math.abs(stepsFromCenter);
   return {
     scale: Math.max(0.58, 1 - stepsAway * 0.17),
     opacity: Math.max(0.24, 1 - stepsAway * 0.16),

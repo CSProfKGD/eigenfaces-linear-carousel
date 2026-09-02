@@ -10,9 +10,10 @@ The page is an interaction-led educational working surface. It should let a visi
 - Place the hero at the upper left:
   - Title: `Eigenfaces`
   - Subtitle: `Face It: It’s Just Linear Algebra`
-- Center the square reconstructed-face figure beneath the hero.
+- Center the square reconstructed-face figure beneath the complete hero title and subtitle, with clear vertical separation.
+- Keep the reconstruction topline to `Reconstruction`. Put `Variance retained`, `Dimensions`, and `Reset weights` beneath the image in that order; do not show a projected-face-count metric.
 - Place a full-width looping linear carousel below the reconstruction. Reading order is `Mean`, `PC 01`, `PC 02`, …, `PC 24`.
-- Start with `PC 01` centered and the mean immediately to its left. Show approximately seven slides at wide desktop widths.
+- Start with `Mean` centered. Show approximately seven slides at wide desktop widths.
 - The reconstruction remains visually dominant. The centered slide is largest; adjacent slides progressively recede and fade.
 - The mean slide uses the same visual framing as the eigenface slides but has no slider.
 
@@ -29,7 +30,7 @@ The page is an interaction-led educational working surface. It should let a visi
 - Continuously interpolate slide scale, opacity, and brightness from distance to the active snap; use compositor transforms so the strip never reflows.
 - Autoplay advances every 2.8 seconds. Pause during hover, focus, dragging, slider use, or touch interaction and resume afterward.
 - Disable autoplay and nonessential scale transitions under `prefers-reduced-motion`.
-- Support pointer drag, touch swipe, click/tap-to-center, previous/next buttons, a play/pause button, and Left/Right arrow navigation.
+- Support pointer drag, touch swipe, click/tap-to-center, and Left/Right arrow navigation without a visible previous/play-pause/next control row.
 - Only the centered PC may reveal a weight control. Hover or keyboard focus reveals it on pointer devices; tapping the centered slide reveals it on touch.
 - Use a restrained 6px corner radius on the reconstruction and face tiles.
 - Reveal a translucent control surface over the lower half of an active tile. Preserve enough of the eigenface above and around it to connect the control to the image.
@@ -54,7 +55,7 @@ This project uses FFHQ only for a non-commercial educational visualization of PC
 - State that the source images were automatically aligned and cropped and that this project converts a deterministic subset to grayscale, resizes it, and derives PCA artifacts.
 - Preserve FFHQ's CC BY-NC-SA 4.0 dataset terms and the original per-image license metadata obligations.
 - Treat all derived mean, eigenface, and reconstruction artifacts as non-commercial/share-alike material unless a later legal review establishes otherwise.
-- Before publishing, add a user-visible data attribution notice and retain machine-readable provenance for the selected image identifiers and licenses.
+- Retain attribution and machine-readable provenance for the selected image identifiers and licenses in the project artifacts. The presentation surface intentionally omits a visible attribution footer.
 
 Do not commit the downloaded corpus or the 255 MB FFHQ metadata file. The offline pipeline may cache them in an ignored working directory.
 
@@ -203,10 +204,10 @@ The exact serialization may follow the generated site scaffold, but the logical 
 ### Interface
 
 - The desktop first viewport contains the dominant centered reconstruction, top-left hero, and full-width component carousel.
-- Mean is first and noninteractive; PC 01–24 follow in correct variance order, with PC 01 initially centered.
+- Mean is first, initially centered, and noninteractive; PC 01–24 follow in correct variance order.
 - Hover, keyboard focus, and touch can each reveal and operate every centered component slider.
 - Slide scaling does not cause layout shift or clipping of focus indicators.
-- The carousel loops and pauses for direct interaction; manual controls remain available when autoplay is disabled.
+- The carousel loops and pauses for direct interaction; swipe, drag, click-to-center, and keyboard navigation remain available when autoplay is disabled.
 - Reset is keyboard and touch accessible and visibly returns every readout to its baseline.
 - Mobile layouts preserve content order and introduce no horizontal scrolling.
 - Reduced-motion mode removes nonessential scaling and animation.

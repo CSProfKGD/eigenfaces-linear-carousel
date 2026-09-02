@@ -2,7 +2,7 @@
 
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import createAutoplay from 'embla-carousel-autoplay';
-import { ArrowLeft, ArrowRight, Pause, Play, RotateCcw } from 'lucide-react';
+import { RotateCcw } from 'lucide-react';
 import Image from 'next/image';
 
 import { Button } from '@/components/ui/button';
@@ -100,27 +100,20 @@ function decodePrefixDeltas(payload: Uint8Array, pixelCount: number) {
 
 function applyCarouselDepth(api: CarouselApi) {
   if (!api) return;
-  const engine = api.internalEngine();
   const slideNodes = api.slideNodes();
-  const slideCount = slideNodes.length;
-  const progress = api.scrollProgress();
+  const root = api.rootNode().getBoundingClientRect();
+  const center = root.left + root.width / 2;
+  const step = slideNodes[0]?.offsetWidth || 1;
+  const distances = slideNodes.map((node) => {
+    const bounds = node.getBoundingClientRect();
+    return Math.abs(bounds.left + bounds.width / 2 - center) / step;
+  });
+  const nearestDistance = Math.min(...distances);
 
-  api.scrollSnapList().forEach((snap, snapIndex) => {
-    let distance = snap - progress;
-    engine.slideLooper.loopPoints.forEach((loopPoint) => {
-      if (loopPoint.index !== snapIndex) return;
-      const target = loopPoint.target();
-      if (target < 0) distance = snap - (1 + progress);
-      if (target > 0) distance = snap + (1 - progress);
-    });
-
+  slideNodes.forEach((node, index) => {
     const { scale, opacity, brightness } = carouselPresentation(
-      distance,
-      slideCount,
+      Math.max(0, distances[index] - nearestDistance),
     );
-    const slideIndex = engine.slideRegistry[snapIndex]?.[0];
-    const node = slideIndex === undefined ? undefined : slideNodes[slideIndex];
-    if (!node) return;
     node.style.setProperty('--slide-scale', scale.toFixed(3));
     node.style.setProperty('--slide-opacity', opacity.toFixed(3));
     node.style.setProperty('--slide-brightness', brightness.toFixed(3));
@@ -135,9 +128,12 @@ export function EigenfacesDemo() {
   const [dimensionsOpen, setDimensionsOpen] = useState(false);
   const [activeTile, setActiveTile] = useState<number | null>(null);
   const [carouselApi, setCarouselApi] = useState<CarouselApi>();
-  const [selectedSlide, setSelectedSlide] = useState(1);
+  const [selectedSlide, setSelectedSlide] = useState(0);
   const [autoplaying, setAutoplaying] = useState(true);
   const [reducedMotion, setReducedMotion] = useState(false);
+  const [carouselHovered, setCarouselHovered] = useState(false);
+  const [carouselFocused, setCarouselFocused] = useState(false);
+  const [carouselDragging, setCarouselDragging] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const pendingTouchTileRef = useRef<number | null>(null);
@@ -145,8 +141,6 @@ export function EigenfacesDemo() {
     createAutoplay({
       delay: 2800,
       stopOnInteraction: false,
-      stopOnMouseEnter: true,
-      stopOnFocusIn: true,
     }),
   );
 
@@ -254,18 +248,32 @@ export function EigenfacesDemo() {
 
   useEffect(() => {
     if (!carouselApi) return;
+    const interactionActive =
+      carouselHovered ||
+      carouselFocused ||
+      carouselDragging ||
+      activeTile !== null;
     if (
       autoplayShouldRun({
         enabled: autoplaying,
         reducedMotion,
-        interactionActive: activeTile !== null,
+        interactionActive,
       })
     ) {
       autoplay.play();
     } else {
       autoplay.stop();
     }
-  }, [activeTile, autoplay, autoplaying, carouselApi, reducedMotion]);
+  }, [
+    activeTile,
+    autoplay,
+    autoplaying,
+    carouselApi,
+    carouselDragging,
+    carouselFocused,
+    carouselHovered,
+    reducedMotion,
+  ]);
 
   const rawWeights = useMemo(() => {
     if (!model || zValues.length !== model.manifest.components.length)
@@ -324,13 +332,6 @@ export function EigenfacesDemo() {
       );
   }, [model]);
 
-  const toggleAutoplay = () => {
-    if (reducedMotion || !carouselApi) return;
-    if (autoplaying) autoplay.stop();
-    else autoplay.play();
-    setAutoplaying((playing) => !playing);
-  };
-
   const componentCount = model?.manifest.components.length ?? 24;
   const totalSlides = componentCount + 1;
   const selectedLabel = carouselSlideLabel(selectedSlide);
@@ -359,41 +360,6 @@ export function EigenfacesDemo() {
         <figure className="reconstruction-figure">
           <figcaption className="figure-topline">
             <span className="eyebrow">Reconstruction</span>
-            <div
-              className={`dimensions-control${dimensionsOpen ? ' is-open' : ''}`}
-              onBlur={(event) => {
-                if (!event.currentTarget.contains(event.relatedTarget))
-                  setDimensionsOpen(false);
-              }}
-            >
-              <div className="dimensions-slider-shell">
-                <span>1</span>
-                <Slider
-                  aria-label="Number of principal components used in the reconstruction"
-                  min={1}
-                  max={model?.manifest.maxDimensions ?? 1000}
-                  step={1}
-                  value={[dimensions]}
-                  disabled={!model}
-                  onValueChange={(next) =>
-                    setDimensions(
-                      Math.round(Array.isArray(next) ? next[0] : next),
-                    )
-                  }
-                />
-                <span>{model?.manifest.maxDimensions ?? 1000}</span>
-              </div>
-              <button
-                type="button"
-                className="dimensions-trigger"
-                aria-expanded={dimensionsOpen}
-                aria-label={`${dimensions} ${dimensions === 1 ? 'dimension' : 'dimensions'}. Adjust reconstruction dimensions`}
-                onFocus={() => setDimensionsOpen(true)}
-                onClick={() => setDimensionsOpen((open) => !open)}
-              >
-                {dimensions} {dimensions === 1 ? 'dimension' : 'dimensions'}
-              </button>
-            </div>
           </figcaption>
 
           <div className="reconstruction-stage">
@@ -430,18 +396,59 @@ export function EigenfacesDemo() {
           </div>
 
           <div className="reconstruction-footer">
-            <div>
-              <span className="footer-kicker">Projected from</span>
-              <strong>
-                {model ? model.manifest.sampleCount.toLocaleString() : '5,000'}{' '}
-                faces
-              </strong>
-            </div>
-            <div>
+            <div className="variance-metric">
               <span className="footer-kicker">Variance retained</span>
               <strong>
                 {variance ? `${(variance * 100).toFixed(1)}%` : '—'}
               </strong>
+            </div>
+            <div className="dimensions-metric">
+              <span className="footer-kicker">Dimensions</span>
+              <div
+                className={`dimensions-control${dimensionsOpen ? ' is-open' : ''}`}
+                onBlur={(event) => {
+                  if (!event.currentTarget.contains(event.relatedTarget))
+                    setDimensionsOpen(false);
+                }}
+                onPointerLeave={(event) => {
+                  if (event.pointerType !== 'mouse') return;
+                  const focused = document.activeElement;
+                  if (
+                    focused instanceof HTMLElement &&
+                    event.currentTarget.contains(focused)
+                  )
+                    focused.blur();
+                  setDimensionsOpen(false);
+                }}
+              >
+                <button
+                  type="button"
+                  className="dimensions-trigger"
+                  aria-expanded={dimensionsOpen}
+                  aria-label={`${dimensions} ${dimensions === 1 ? 'dimension' : 'dimensions'}. Adjust reconstruction dimensions`}
+                  onFocus={() => setDimensionsOpen(true)}
+                  onClick={() => setDimensionsOpen((open) => !open)}
+                >
+                  {dimensions}
+                </button>
+                <div className="dimensions-slider-shell">
+                  <span>1</span>
+                  <Slider
+                    aria-label="Number of principal components used in the reconstruction"
+                    min={1}
+                    max={model?.manifest.maxDimensions ?? 1000}
+                    step={1}
+                    value={[dimensions]}
+                    disabled={!model}
+                    onValueChange={(next) =>
+                      setDimensions(
+                        Math.round(Array.isArray(next) ? next[0] : next),
+                      )
+                    }
+                  />
+                  <span>{model?.manifest.maxDimensions ?? 1000}</span>
+                </div>
+              </div>
             </div>
             <Button
               type="button"
@@ -459,10 +466,7 @@ export function EigenfacesDemo() {
 
       <section className="basis-section" aria-labelledby="basis-title">
         <div className="basis-heading">
-          <div>
-            <span className="eyebrow">Eigenspace</span>
-            <h2 id="basis-title">Principal components</h2>
-          </div>
+          <h2 id="basis-title">Principal components</h2>
           <div className="carousel-status" aria-live="polite">
             <span>{selectedLabel}</span>
             <span>
@@ -478,14 +482,26 @@ export function EigenfacesDemo() {
           opts={{
             align: 'center',
             loop: true,
-            startIndex: 1,
+            startIndex: 0,
             duration: 34,
             slidesToScroll: 1,
           }}
           plugins={[autoplay]}
           aria-label="Mean face and principal components"
         >
-          <CarouselContent className="carousel-track">
+          <CarouselContent
+            className="carousel-track"
+            onMouseEnter={() => setCarouselHovered(true)}
+            onMouseLeave={() => setCarouselHovered(false)}
+            onFocusCapture={() => setCarouselFocused(true)}
+            onBlurCapture={(event) => {
+              if (!event.currentTarget.contains(event.relatedTarget))
+                setCarouselFocused(false);
+            }}
+            onPointerDownCapture={() => setCarouselDragging(true)}
+            onPointerUpCapture={() => setCarouselDragging(false)}
+            onPointerCancelCapture={() => setCarouselDragging(false)}
+          >
             <CarouselItem
               className={`component-slide${selectedSlide === 0 ? ' is-selected' : ''}`}
             >
@@ -586,10 +602,6 @@ export function EigenfacesDemo() {
                         step={0.01}
                         value={[value]}
                         disabled={excluded}
-                        onPointerDown={() => autoplay.stop()}
-                        onPointerUp={() => {
-                          if (autoplaying && !reducedMotion) autoplay.play();
-                        }}
                         onValueChange={(next) => {
                           const nextValue = Array.isArray(next)
                             ? next[0]
@@ -621,63 +633,8 @@ export function EigenfacesDemo() {
                 </CarouselItem>
               ))}
           </CarouselContent>
-
-          <div className="carousel-controls">
-            <button
-              type="button"
-              onClick={() => carouselApi?.scrollPrev()}
-              aria-label="Previous component"
-            >
-              <ArrowLeft aria-hidden="true" />
-            </button>
-            <button
-              type="button"
-              onClick={toggleAutoplay}
-              disabled={reducedMotion}
-              aria-label={
-                reducedMotion
-                  ? 'Autoplay disabled by reduced motion preference'
-                  : autoplaying
-                    ? 'Pause carousel'
-                    : 'Play carousel'
-              }
-            >
-              {autoplaying ? (
-                <Pause aria-hidden="true" />
-              ) : (
-                <Play aria-hidden="true" />
-              )}
-            </button>
-            <button
-              type="button"
-              onClick={() => carouselApi?.scrollNext()}
-              aria-label="Next component"
-            >
-              <ArrowRight aria-hidden="true" />
-            </button>
-          </div>
         </Carousel>
       </section>
-
-      <footer className="data-attribution">
-        <p>
-          Educational PCA visualization derived from the{' '}
-          <a
-            href="https://github.com/NVlabs/ffhq-dataset"
-            target="_blank"
-            rel="noreferrer"
-          >
-            Flickr-Faces-HQ dataset
-          </a>
-          . Source images were aligned, converted to grayscale, resized, and
-          transformed into PCA artifacts under the original non-commercial,
-          share-alike terms.
-        </p>
-        <cite>
-          T. Karras, S. Laine, and T. Aila, “A Style-Based Generator
-          Architecture for Generative Adversarial Networks.”
-        </cite>
-      </footer>
     </main>
   );
 }

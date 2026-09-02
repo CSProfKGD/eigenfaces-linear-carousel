@@ -12,10 +12,12 @@ The eventual site is for non-commercial educational use. Follow the FFHQ attribu
 
 - Keep the primary working surface visible in the first desktop viewport.
 - The upper-left hero reads `Eigenfaces` with the subtitle `Face It: It’s Just Linear Algebra`.
-- Center one dominant reconstructed-face stage beneath the hero.
+- Center one dominant reconstructed-face stage after the hero's full title-and-subtitle block; it must not overlap the hero vertically.
+- Keep the reconstruction topline to the single `Reconstruction` label. Beneath the image, show `Variance retained`, the interactive `Dimensions` value, and the reset action in that order.
 - Place one full-width looping linear carousel beneath the reconstruction. Its reading order is the mean face followed by eigenfaces 1–24 in decreasing explained-variance order.
 - The centered slide is largest, adjacent slides progressively recede, and outer slides fade without creating a perspective gimmick.
 - The average-face slide is informational and never presents a weight control.
+- The carousel opens with the average face centered.
 - The 24 eigenface slides are the exposed weight controls. A separate dimensions control selects a reconstruction prefix from 1–1000 components and defaults to 512; never reconstruct from only the visible components.
 - On narrow screens, preserve the order hero, reconstruction, carousel and show three slides with edge peeks without horizontal page scrolling.
 
@@ -24,7 +26,7 @@ The eventual site is for non-commercial educational use. Follow the FFHQ attribu
 - The centered eigenface reveals its signed weight control on pointer hover or keyboard focus.
 - Tapping or clicking a non-centered slide centers it. Touch users reveal the centered slide's control with a tap, then drag its native range input.
 - The carousel loops, advances every 2.8 seconds, and pauses during hover, focus, dragging, slider use, or touch interaction before resuming.
-- Support pointer drag, touch swipe, previous/next buttons, a play/pause button, and Left/Right arrow navigation.
+- Support pointer drag, touch swipe, click-to-center, and Left/Right arrow navigation without a visible carousel control row.
 - Slider movement updates the reconstruction on the same interaction frame. Do not animate, debounce, or ease direct manipulation.
 - Show the current signed weight in a compact tabular-numeral readout.
 - Provide one quiet reset action that restores all 24 exposed weights to their original projected values.
@@ -57,14 +59,14 @@ The eventual site is for non-commercial educational use. Follow the FFHQ attribu
 - Use semantic headings, buttons, figures, and native range inputs.
 - Give every slider an accessible name that includes its component number and describes that it changes the reconstruction.
 - Make hover-only information equally available through keyboard focus and touch.
-- Preserve visible, high-contrast focus indicators and a logical reading/tab order: hero context, reconstruction, mean, components 1–24, carousel controls, reset.
+- Preserve visible, high-contrast focus indicators and a logical reading/tab order: hero context, reconstruction controls, mean, then components 1–24.
 - Provide text alternatives for the average face, each eigenface, and the reconstructed output without claiming the output identifies the subject.
 - Maintain usable targets and legible values at mobile sizes and at 200% zoom.
 
 ## Data, licensing, and privacy
 
 - Use only the deterministic FFHQ subset and derived artifacts described in `context.md`.
-- Include dataset attribution, the FFHQ paper citation, modification disclosure, and the applicable non-commercial/share-alike terms before publication.
+- Retain dataset attribution, the FFHQ paper citation, modification disclosure, and the applicable non-commercial/share-alike terms in the project provenance artifact; do not add a visible page footer unless the product specification changes.
 - Describe the feature as an educational PCA reconstruction. Do not add identity labels, similarity scores, recognition claims, or demographic inference.
 - Do not commit the raw FFHQ corpus, the FFHQ metadata archive, or the original HEIC portrait.
 - Do not log, upload, or transmit face pixels from the eventual client application.

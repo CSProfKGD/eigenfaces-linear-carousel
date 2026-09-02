@@ -9,9 +9,9 @@ import {
 
 describe('carousel presentation', () => {
   it('keeps the active snap dominant and progressively recedes neighboring slides', () => {
-    const centered = carouselPresentation(0, 25);
-    const adjacent = carouselPresentation(1 / 25, 25);
-    const outer = carouselPresentation(3 / 25, 25);
+    const centered = carouselPresentation(0);
+    const adjacent = carouselPresentation(1);
+    const outer = carouselPresentation(3);
 
     expect(centered).toEqual({ scale: 1, opacity: 1, brightness: 1 });
     expect(adjacent.scale).toBeLessThan(centered.scale);
@@ -20,7 +20,7 @@ describe('carousel presentation', () => {
   });
 
   it('clamps distant slides to readable visual floors', () => {
-    expect(carouselPresentation(1, 25)).toEqual({
+    expect(carouselPresentation(25)).toEqual({
       scale: 0.58,
       opacity: 0.24,
       brightness: 0.58,
