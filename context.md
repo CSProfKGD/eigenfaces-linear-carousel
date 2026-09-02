@@ -40,6 +40,7 @@ The page is an interaction-led educational working surface. It should let a visi
 - Each slider spans `z_i,baseline - 3` through `z_i,baseline + 3`, which is equivalent to raw weight bounds `w_i,baseline ± 3 sqrt(lambda_i)`.
 - The reset control restores all 24 exposed raw weights to their baseline values in one state update.
 - A PC above the current dimensions value remains browseable but its weight control is disabled and labelled outside the current prefix. Preserve its adjusted value so it becomes effective again when the prefix grows.
+- When a dimensions change moves a PC into or out of the active prefix, transition its thumbnail opacity smoothly instead of dimming abruptly; reduced-motion mode remains effectively instantaneous.
 - The reconstruction dimensions value reveals a minimal slider on hover, keyboard focus, or tap. It spans 1–1000 in integer steps, defaults to 512, and updates the displayed prefix and actual cumulative explained variance together.
 - Give the dimensions disclosure enough vertical clearance for its thumb and focus ring; its horizontal reveal mask must not clip the circular control above or below.
 
