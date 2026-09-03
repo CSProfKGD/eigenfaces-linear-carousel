@@ -658,6 +658,8 @@ input {
     width: 105px;
   }
   .dimensions-slider-shell {
+    right: calc(100% + 8px);
+    left: auto;
     grid-template-columns: minmax(90px, 1fr);
     gap: 0;
   }

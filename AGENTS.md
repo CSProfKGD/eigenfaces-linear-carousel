@@ -20,6 +20,7 @@ The eventual site is for non-commercial educational use. Follow the FFHQ attribu
 - The carousel opens with the average face centered.
 - The 24 eigenface slides are the exposed weight controls. A separate dimensions control selects a reconstruction prefix from 1–1000 components and defaults to 512; never reconstruct from only the visible components.
 - On narrow screens, preserve the order hero, reconstruction, carousel and show three slides with edge peeks without horizontal page scrolling.
+- On narrow screens only, the dimensions slider expands inward to the left of its value so the complete control remains inside the viewport; preserve the existing desktop disclosure direction and placement.
 
 ## Interaction model
 

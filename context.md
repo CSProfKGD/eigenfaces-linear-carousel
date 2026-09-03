@@ -45,6 +45,7 @@ The page is an interaction-led educational working surface. It should let a visi
 - When a dimensions change moves a PC into or out of the active prefix, transition its thumbnail opacity smoothly instead of dimming abruptly; reduced-motion mode remains effectively instantaneous.
 - The reconstruction dimensions value reveals a minimal slider on hover, keyboard focus, or tap. It spans 1–1000 in integer steps, defaults to 512, and updates the displayed prefix and actual cumulative explained variance together.
 - Give the dimensions disclosure enough vertical clearance for its thumb and focus ring; its horizontal reveal mask must not clip the circular control above or below.
+- At mobile widths, anchor the dimensions disclosure to the right of the metric and expand it inward to the left of the value so no part is clipped by the viewport. Keep desktop positioning unchanged.
 
 ## Dataset selection and provenance
 
